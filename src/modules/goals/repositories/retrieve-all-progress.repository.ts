@@ -83,7 +83,7 @@ export class RetrieveAllProgressRepository implements IRetrieveAllProgressReposi
       {
         $and: [
           { $eq: ['$visibility', 'supporters'] },
-          { $gt: [{ $size: '$my_support' }, 0] },
+          { $gt: [{ $size: { $ifNull: ['$my_support', []] } }, 0] },
         ],
       },
     ];
