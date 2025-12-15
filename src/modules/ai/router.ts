@@ -11,7 +11,7 @@ const makeRouter = async ({ dbConnection }: IBaseAppInput) => {
   const router = Router();
 
   const routes: IRoute[] = [
-    { method: 'post', path: '/send', middlewares: [authMiddleware], controller: controller.sendController },
+    { method: 'get', path: '/send', middlewares: [authMiddleware], controller: controller.sendController },
   ];
 
   routes.forEach(({ method, path, controller, middlewares }) => {
