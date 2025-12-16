@@ -3,7 +3,6 @@ import { Router } from 'express';
 import type { IBaseAppInput } from '@/app';
 import { makeController, makeMiddleware } from '@/express';
 import { authMiddleware } from '@/middlewares/auth.middleware';
-import { authOptionalMiddleware } from '@/middlewares/auth-optional.middleware';
 import { refreshMiddleware } from '@/middlewares/refresh.middleware';
 import type { IRoute } from '@/router';
 
@@ -15,7 +14,7 @@ const makeRouter = async ({ dbConnection }: IBaseAppInput) => {
   const routes: IRoute[] = [
     { method: 'post', path: '/signup', controller: controller.signupController },
     { method: 'post', path: '/signin', controller: controller.signinController },
-    { method: 'get', path: '/me', middlewares: [authOptionalMiddleware], controller: controller.meController },
+    { method: 'get', path: '/me', middlewares: [authMiddleware], controller: controller.meController },
     { method: 'post', path: '/refresh', middlewares: [refreshMiddleware], controller: controller.refreshController },
     { method: 'post', path: '/signout', controller: controller.signoutController },
     { method: 'post', path: '/update-last-seen', middlewares: [authMiddleware], controller: controller.updateLastSeenController },
