@@ -15,10 +15,10 @@ export const signoutController: IController = async (controllerInput: IControlle
     await session.commitTransaction();
     controllerInput.res.status(200);
     controllerInput.res.cookie('thinkaction_access', '', {
-      secure: true, httpOnly: true, sameSite: 'none', expires: new Date(0),
+      secure: true, httpOnly: true, sameSite: 'lax', expires: new Date(0),
     });
     controllerInput.res.cookie('thinkaction_refresh', '', {
-      secure: true, httpOnly: true, sameSite: 'none', expires: new Date(0),
+      secure: true, httpOnly: true, sameSite: 'lax', expires: new Date(0),
     });
     controllerInput.res.json();
   } catch (error) {

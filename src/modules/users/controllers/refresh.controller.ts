@@ -8,7 +8,7 @@ export const refreshController: IController = async (controllerInput: IControlle
   controllerInput.res.cookie('thinkaction_access', accessToken, {
     secure: true,
     httpOnly: true,
-    sameSite: 'none',
+    sameSite: 'lax',
     expires: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes,
   });
 
@@ -16,7 +16,7 @@ export const refreshController: IController = async (controllerInput: IControlle
   controllerInput.res.cookie('thinkaction_refresh', refreshToken, {
     secure: true,
     httpOnly: true,
-    sameSite: 'none',
+    sameSite: 'lax',
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
   });
   controllerInput.res.json({

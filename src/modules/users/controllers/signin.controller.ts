@@ -45,13 +45,13 @@ export const signinController: IController = async (controllerInput: IController
     controllerInput.res.cookie('thinkaction_access', response.data.access_token, {
       secure: true,
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       expires: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes,
     });
     controllerInput.res.cookie('thinkaction_refresh', response.data.refresh_token, {
       secure: true,
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
     });
     controllerInput.res.json(response.data);
