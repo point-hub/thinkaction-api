@@ -12,6 +12,13 @@ export interface IRetrieveAllOutput {
   pagination: IPagination
 }
 
+const toBoolean = (value: unknown): boolean => {
+  if (value === true || value === false) return value;
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return false; // default
+};
+
 export class RetrieveAllRepository implements IRetrieveAllRepository {
   constructor(
     public database: IDatabase,
@@ -19,6 +26,11 @@ export class RetrieveAllRepository implements IRetrieveAllRepository {
   ) {}
 
   async handle(query: IQuery): Promise<IRetrieveAllOutput> {
+    // TODO: this is temporary fix because @point-hub/papi not convert boolean correctly
+    if (query['filter.is_read']) {
+      query['filter.is_read'] = toBoolean(query['filter.is_read']);
+    }
+
     const pipeline: IPipeline[] = [];
 
     pipeline.push(...this.pipeRecipient());
