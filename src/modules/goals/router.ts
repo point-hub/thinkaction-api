@@ -14,7 +14,7 @@ const makeRouter = async ({ dbConnection }: IBaseAppInput) => {
   const routes: IRoute[] = [
     { method: 'post', path: '/', middlewares: [authMiddleware], controller: controller.createController },
     { method: 'get', path: '/', middlewares: [authOptionalMiddleware], controller: controller.retrieveAllController },
-    { method: 'get', path: '/progress', controller: controller.retrieveAllProgressController },
+    { method: 'get', path: '/progress', middlewares: [authOptionalMiddleware], controller: controller.retrieveAllProgressController },
     { method: 'get', path: '/:id', middlewares: [authOptionalMiddleware], controller: controller.retrieveController },
     { method: 'post', path: '/:id/progress', middlewares: [authMiddleware], controller: controller.createProgressController },
     { method: 'patch', path: '/:id', middlewares: [authMiddleware], controller: controller.updateController },

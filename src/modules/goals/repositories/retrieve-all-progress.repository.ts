@@ -31,7 +31,12 @@ export class RetrieveAllProgressRepository implements IRetrieveAllProgressReposi
 
     // Join users & supporters first (goal-level)
     pipeline.push(...this.pipeJoinCreatedByUser());
-    pipeline.push(...this.pipeFilterVisibility(query['user']?._id));
+    pipeline.push(...this.pipeJoinSupporters(query));
+    if (query['supporting_only']) {
+      pipeline.push(...this.pipeFilterSupportingVisibility());
+    } else {
+      pipeline.push(...this.pipeFilterVisibility(query['user']?._id));
+    }
 
     // Convert each progress item into its own document
     pipeline.push(...this.pipeUnwindProgress());
@@ -68,6 +73,49 @@ export class RetrieveAllProgressRepository implements IRetrieveAllProgressReposi
         $unwind: {
           path: '$created_by',
           preserveNullAndEmptyArrays: true,
+        },
+      },
+    ];
+  }
+
+  private pipeJoinSupporters(query: IQuery): IPipeline[] {
+    return [
+      {
+        $lookup: {
+          from: 'supports',
+          let: {
+            createdById: '$created_by_id',
+            userId: { $toObjectId: query['user']?._id },
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$supporter_id', '$$userId'] },
+                    { $eq: ['$supporting_id', '$$createdById'] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'my_support',
+        },
+      },
+    ];
+  }
+
+  private pipeFilterSupportingVisibility(): IPipeline[] {
+    const pipeline: IPipeline[] = [
+      { $gt: [{ $size: '$my_support' }, 0] },
+    ];
+
+    return [
+      {
+        $match: {
+          $expr: {
+            $or: pipeline,
+          },
         },
       },
     ];
@@ -159,6 +207,9 @@ export class RetrieveAllProgressRepository implements IRetrieveAllProgressReposi
           // goal
           visibility: 1,
           status: 1,
+
+          // support
+          my_support: 1,
 
           // user
           created_by: {
