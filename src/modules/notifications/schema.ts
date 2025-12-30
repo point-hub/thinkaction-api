@@ -18,7 +18,7 @@ export const schema: ISchema[] = [
     indexes: [{ spec: ['recipient_id'], options: {} }],
     schema: {
       bsonType: 'object',
-      required: ['type', 'actor_id', 'recipient_id', 'message', 'is_read', 'created_at'],
+      required: ['type', 'recipient_id', 'message', 'is_read', 'created_at'],
       properties: {
         type: {
           bsonType: 'string',
