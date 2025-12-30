@@ -24,6 +24,8 @@ const ONE_MINUTE = 1000 * 60;
 const ONE_HOUR = ONE_MINUTE * 60;
 const ONE_DAY = ONE_HOUR * 24;
 const ONE_MONTH = ONE_DAY * 30;
+const ONE_YEAR = ONE_MONTH * 12;
+const FIVE_YEAR = ONE_YEAR * 5;
 
 export const TokenService: ITokenService = {
   // Extract the token from an Authorization header
@@ -46,14 +48,14 @@ export const TokenService: ITokenService = {
     return jwt.sign(payload, authConfig.secret);
   },
 
-  // 30-minutes access token
+  // 5-year access token. see issue #1
   createAccessToken(id) {
-    return this.createToken(id, ONE_MINUTE * 30);
+    return this.createToken(id, FIVE_YEAR);
   },
 
-  // 30-day refresh token
+  // 5-year refresh token. see issue #1
   createRefreshToken(id) {
-    return this.createToken(id, ONE_MONTH);
+    return this.createToken(id, FIVE_YEAR);
   },
 
   // Verify token validity and signature
