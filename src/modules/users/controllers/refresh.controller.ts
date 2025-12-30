@@ -9,7 +9,7 @@ export const refreshController: IController = async (controllerInput: IControlle
     secure: true,
     httpOnly: true,
     sameSite: 'lax',
-    expires: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes,
+    expires: new Date(Date.now() + 5 * 365 * 24 * 60 * 60 * 1000), // 5 years
   });
 
   const refreshToken = TokenService.createRefreshToken(controllerInput.req['user']?._id as string);
@@ -17,7 +17,7 @@ export const refreshController: IController = async (controllerInput: IControlle
     secure: true,
     httpOnly: true,
     sameSite: 'lax',
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+    expires: new Date(Date.now() + 5 * 365 * 24 * 60 * 60 * 1000), // 5 years
   });
   controllerInput.res.json({
     ...controllerInput.req['user'],
