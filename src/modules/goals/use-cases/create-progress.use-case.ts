@@ -53,6 +53,7 @@ export class CreateProgressUseCase extends BaseUseCase<IInput, IDeps, ISuccessDa
           $position: 0,
         },
       },
+      updated_at: new Date(),
     });
 
     // 3. Return standardized success response.

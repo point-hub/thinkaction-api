@@ -264,6 +264,7 @@ export class RetrieveAllRepository implements IRetrieveAllRepository {
           status: 1,
           progress: 1,
           created_at: 1,
+          updated_at: 1,
           // comments
           comments: 1,
           total_comments: 1,
