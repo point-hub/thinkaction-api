@@ -6,6 +6,12 @@ export type NotificationType = 'support' | 'unsupport' | 'cheers' | 'comment' | 
 
 export interface INotificationTemplate { type: NotificationType, notification: string }
 
+export interface INotificationService {
+  handle(input: IInput): Promise<IUseCaseOutputSuccess<ISuccessData> | IUseCaseOutputFailed>
+  getTemplate(type: NotificationType,payload: Record<string, string>): string
+}
+
+
 export const notificationTemplate: INotificationTemplate[] = [
   {
     type: 'support',
@@ -42,6 +48,7 @@ interface IInput {
     entities?: Record<string, string>
     is_read?: boolean
     read_at?: Date
+    thumbnail_url?: string
     created_at?: Date
   }
 }
@@ -54,7 +61,7 @@ export interface ISuccessData {
   inserted_id: string
 }
 
-export class NotificationService extends BaseUseCase<IInput, IDeps, ISuccessData> {
+export class NotificationService extends BaseUseCase<IInput, IDeps, ISuccessData> implements INotificationService {
 
   async handle(input: IInput): Promise<IUseCaseOutputSuccess<ISuccessData> | IUseCaseOutputFailed> {
 

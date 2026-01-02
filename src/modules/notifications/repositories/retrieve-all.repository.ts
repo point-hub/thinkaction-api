@@ -92,6 +92,7 @@ export class RetrieveAllRepository implements IRetrieveAllRepository {
           message: 1,
           is_read: 1,
           entities: 1,
+          thumbnail_url: 1,
           created_at: 1,
           actor: {
             _id: 1,

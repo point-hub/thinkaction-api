@@ -2,7 +2,7 @@ import { BaseUseCase, type IUseCaseOutputFailed, type IUseCaseOutputSuccess } fr
 
 import { type IAblyService } from '@/modules/ably/services/ably.service';
 import type { IRetrieveRepository as IGoalRetrieveRepository } from '@/modules/goals/repositories/retrieve.repository';
-import type { NotificationService, NotificationType } from '@/modules/notifications/services/notification.service';
+import type { INotificationService, NotificationService, NotificationType } from '@/modules/notifications/services/notification.service';
 import type { IUserEntity } from '@/modules/users/interface';
 
 import { CommentEntity } from '../entity';
@@ -21,7 +21,7 @@ export interface IInput {
 export interface IDeps {
   createRepository: ICreateRepository
   goalRetrieveRepository: IGoalRetrieveRepository
-  notificationService: NotificationService
+  notificationService: INotificationService
   ablyService: IAblyService
 }
 
@@ -68,6 +68,7 @@ export class CreateUseCase extends BaseUseCase<IInput, IDeps, ISuccessData> {
       recipient_id: goal.created_by._id,
       message: message,
       is_read: false,
+      thumbnail_url: goal.thumbnail_url,
       created_at: new Date(),
       entities: {
         goals: input.data.goal_id,

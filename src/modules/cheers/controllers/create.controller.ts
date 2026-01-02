@@ -1,5 +1,9 @@
 import type { IController, IControllerInput } from '@point-hub/papi';
 
+import { AblyService } from '@/modules/ably/services/ably.service';
+import { RetrieveRepository as GoalRetrieveRepository } from '@/modules/goals/repositories/retrieve.repository';
+import { CreateRepository as NotificationCreateRepository } from '@/modules/notifications/repositories/create.repository';
+import { NotificationService } from '@/modules/notifications/services/notification.service';
 import type { IUserEntity } from '@/modules/users/interface';
 import { schemaValidation } from '@/utils/validation';
 
@@ -19,10 +23,18 @@ export const createController: IController = async (controllerInput: IController
 
     // Initialize repositories and utilities
     const createRepository = new CreateRepository(controllerInput.dbConnection, { session });
+    const goalRetrieveRepository = new GoalRetrieveRepository(controllerInput.dbConnection, { session });
+    const notificationCreateRepository = new NotificationCreateRepository(controllerInput.dbConnection, { session });
+    const notificationService = new NotificationService({
+      createRepository: notificationCreateRepository,
+    });
 
     // Initialize use case with dependencies
     const createUseCase = new CreateUseCase({
       createRepository,
+      goalRetrieveRepository,
+      notificationService,
+      ablyService: AblyService,
     });
 
     // Execute business logic
