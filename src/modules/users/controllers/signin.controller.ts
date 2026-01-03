@@ -1,5 +1,6 @@
 import type { IController, IControllerInput } from '@point-hub/papi';
 
+import cookieConfig from '@/config/cookie';
 import { schemaValidation } from '@/utils/validation';
 
 import { IdentityMatcherRepository } from '../repositories/identity-matcher.repository';
@@ -43,12 +44,14 @@ export const signinController: IController = async (controllerInput: IController
     await session.commitTransaction();
     controllerInput.res.status(200);
     controllerInput.res.cookie('thinkaction_access', response.data.access_token, {
+      domain: cookieConfig.domain === 'localhost' ? 'localhost' : `.${cookieConfig.domain}`,
       secure: true,
       httpOnly: true,
       sameSite: 'lax',
       expires: new Date(Date.now() + 5 * 365 * 24 * 60 * 60 * 1000), // 5 years
     });
     controllerInput.res.cookie('thinkaction_refresh', response.data.refresh_token, {
+      domain: cookieConfig.domain === 'localhost' ? 'localhost' : `.${cookieConfig.domain}`,
       secure: true,
       httpOnly: true,
       sameSite: 'lax',

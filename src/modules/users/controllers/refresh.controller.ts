@@ -1,11 +1,14 @@
 import { type IController, type IControllerInput } from '@point-hub/papi';
 
+import cookieConfig from '@/config/cookie';
+
 import { TokenService } from '../utils/jwt';
 
 export const refreshController: IController = async (controllerInput: IControllerInput) => {
   controllerInput.res.status(200);
   const accessToken = TokenService.createAccessToken(controllerInput.req['user']?._id as string);
   controllerInput.res.cookie('thinkaction_access', accessToken, {
+    domain: cookieConfig.domain === 'localhost' ? 'localhost' : `.${cookieConfig.domain}`,
     secure: true,
     httpOnly: true,
     sameSite: 'lax',
@@ -14,6 +17,7 @@ export const refreshController: IController = async (controllerInput: IControlle
 
   const refreshToken = TokenService.createRefreshToken(controllerInput.req['user']?._id as string);
   controllerInput.res.cookie('thinkaction_refresh', refreshToken, {
+    domain: cookieConfig.domain === 'localhost' ? 'localhost' : `.${cookieConfig.domain}`,
     secure: true,
     httpOnly: true,
     sameSite: 'lax',
