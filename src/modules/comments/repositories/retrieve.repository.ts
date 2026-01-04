@@ -11,6 +11,11 @@ export interface IRetrieveOutput {
   goal_id: string
   parent_id: string
   comment: string
+  mentions?: {
+    _id: string
+    label: string
+    link?: string
+  }[]
   created_by_id: string
   created_at: Date
   updated_at: Date
@@ -23,16 +28,17 @@ export class RetrieveRepository implements IRetrieveRepository {
   ) { }
 
   async handle(_id: string): Promise<IRetrieveOutput> {
-    const response = await this.database.collection(collectionName).retrieve(_id, this.options);
+    const response = await this.database.collection(collectionName).retrieve<IRetrieveOutput>(_id, this.options);
 
     return {
       _id: response?._id as string,
-      goal_id: response?.['goal_id'] as string,
-      parent_id: response?.['parent_id'] as string,
-      comment: response?.['comment'] as string,
-      created_by_id: response?.['created_by_id'] as string,
-      created_at: response?.['created_at'] as Date,
-      updated_at: response?.['updated_at'] as Date,
+      goal_id: response?.goal_id as string,
+      parent_id: response?.parent_id as string,
+      comment: response?.comment as string,
+      mentions: response?.mentions,
+      created_by_id: response?.created_by_id as string,
+      created_at: response?.created_at as Date,
+      updated_at: response?.updated_at as Date,
     };
   }
 }

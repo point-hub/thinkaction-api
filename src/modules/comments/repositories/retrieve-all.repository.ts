@@ -42,6 +42,7 @@ export class RetrieveAllRepository implements IRetrieveAllRepository {
         '_id': 1,
         'goal_id': 1,
         'comment': 1,
+        'mentions': 1,
         'created_at': 1,
         'created_by': {
           '_id': 1,

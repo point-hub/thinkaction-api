@@ -2,7 +2,7 @@ import { BaseUseCase, type IUseCaseOutputFailed, type IUseCaseOutputSuccess } fr
 
 import { type IAblyService } from '@/modules/ably/services/ably.service';
 import type { IRetrieveRepository as IGoalRetrieveRepository } from '@/modules/goals/repositories/retrieve.repository';
-import type { INotificationService, NotificationService, NotificationType } from '@/modules/notifications/services/notification.service';
+import type { INotificationService, NotificationType } from '@/modules/notifications/services/notification.service';
 import type { IUserEntity } from '@/modules/users/interface';
 
 import { CommentEntity } from '../entity';
@@ -15,6 +15,11 @@ export interface IInput {
     comment: string
     created_by_id: string
     parent_id: string
+    mentions?: {
+      _id: string
+      label: string
+      link?: string
+    }[]
   }
 }
 
@@ -52,6 +57,7 @@ export class CreateUseCase extends BaseUseCase<IInput, IDeps, ISuccessData> {
       comment: input.data.comment,
       created_by_id: input.user._id,
       parent_id: input.data.parent_id,
+      mentions: input.data.mentions,
     });
 
     // 3. Save the comment into the repository.
