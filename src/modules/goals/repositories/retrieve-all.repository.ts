@@ -31,6 +31,22 @@ export class RetrieveAllRepository implements IRetrieveAllRepository {
     pipeline.push(...this.pipeJoinCheers());
     pipeline.push(...this.pipeAddCheerStats(query['user']?._id));
     pipeline.push(...this.pipeJoinComments());
+    pipeline.push({
+      $addFields: {
+        last_progress_at: {
+          $cond: {
+            if: {
+              $gt: [
+                { $max: '$progress.created_at' },
+                '$created_at',
+              ],
+            },
+            then: { $max: '$progress.created_at' },
+            else: '$created_at',
+          },
+        },
+      },
+    });
     pipeline.push(...this.pipeFinalProjection());
 
     const response = await this.database.collection(collectionName).aggregate(pipeline, query, this.options);
@@ -265,6 +281,7 @@ export class RetrieveAllRepository implements IRetrieveAllRepository {
           progress: 1,
           created_at: 1,
           updated_at: 1,
+          last_progress_at: 1,
           // comments
           comments: 1,
           total_comments: 1,
