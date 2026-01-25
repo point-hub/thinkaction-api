@@ -93,6 +93,28 @@ export class CreateUseCase extends BaseUseCase<IInput, IDeps, ISuccessData> {
       });
     }
 
+    // For metions user
+    if (commentEntity.data.mentions) {
+      for (const mention of commentEntity.data.mentions) {
+        await this.deps.notificationService.handle({
+          data: {
+            ...data,
+            type: 'mention',
+            recipient_id: mention._id,
+            message: `${input.user.username} is mention you on comment`,
+          },
+        });
+
+        this.deps.ablyService.publish(`notifications:${mention._id}`, 'new', {
+          ...data,
+          type: 'mention',
+          actor: input.user,
+          recipient_id: mention._id,
+          message: `${input.user.username} is mention you on comment`,
+        });
+      }
+    }
+
     // 7. Return success response including inserted comment ID.
     return this.success({
       inserted_id: responseCreate.inserted_id,

@@ -2,7 +2,7 @@ import { BaseUseCase, type IUseCaseOutputFailed, type IUseCaseOutputSuccess } fr
 
 import type { ICreateRepository } from '../repositories/create.repository';
 
-export type NotificationType = 'support' | 'unsupport' | 'cheers' | 'comment' | 'comment-replied' | 'goal-failed'
+export type NotificationType = 'support' | 'unsupport' | 'cheers' | 'comment' | 'mention' | 'comment-replied' | 'goal-failed'
 
 export interface INotificationTemplate { type: NotificationType, notification: string }
 
@@ -28,6 +28,10 @@ export const notificationTemplate: INotificationTemplate[] = [
   {
     type: 'comment',
     notification: '[username] is commenting on your goal',
+  },
+  {
+    type: 'mention',
+    notification: '[username] is mention you on comment',
   },
   {
     type: 'comment-replied',
