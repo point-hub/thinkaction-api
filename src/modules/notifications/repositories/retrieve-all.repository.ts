@@ -31,6 +31,10 @@ export class RetrieveAllRepository implements IRetrieveAllRepository {
       query['filter.is_read'] = toBoolean(query['filter.is_read']);
     }
 
+    if (!query['filter.type']) {
+      query['filter.type'] = { $ne: 'system' };
+    }
+
     const pipeline: IPipeline[] = [];
 
     pipeline.push(...this.pipeRecipient());
