@@ -101,7 +101,7 @@ export class CreateUseCase extends BaseUseCase<IInput, IDeps, ISuccessData> {
             ...data,
             type: 'mention',
             recipient_id: mention._id,
-            message: `${input.user.username} is mention you on comment`,
+            message: `${input.user.username} is mentioning you in a comment`,
           },
         });
 
@@ -110,7 +110,7 @@ export class CreateUseCase extends BaseUseCase<IInput, IDeps, ISuccessData> {
           type: 'mention',
           actor: input.user,
           recipient_id: mention._id,
-          message: `${input.user.username} is mention you on comment`,
+          message: `${input.user.username} is mentioning you in a comment`,
         });
       }
     }
